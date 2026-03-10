@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scio MVP Card - Montserrat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Типографика вынесена в переменные для live-редактирования */
+            --main-title-size: 32px;
+            --main-title-lh: 42px;
+
+            --card-title-size: 24px;
+            --card-title-lh: 20px;
+
+            --th-label-size: 16px;
+            --th-label-lh: 40px;
+            /* Значение по умолчанию в px */
+
+            --td-data-size: 16px;
+            --td-data-lh: 35px;
+            /* Значение по умолчанию в px */
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f8fd;
+            /* background-color: #f4f6f8; - вроде как оригинальный цвет */
+            margin: 0;
+            color: #333333;
+        }
+
+        .header-white-bar {
+            background-color: #ffffff;
+            width: 100%;
+            padding: 1px 0 20px 0;
+            /* ОТСТУП ОТ БЕЛОЙ ШАПКИ ДО МЕНЮ: (меняйте это значение, например, margin-bottom: 25px) */
+            margin-bottom: 27px;
+        }
+
+        .header-content {
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            margin-top: 5px;
+            margin-bottom: 27.5px;
+        }
+
+        .logo-container img {
+            width: 110px;
+            height: 35px;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .logo-container img {
+                width: 100px;
+                /* Увеличено до 80px для адекватного мобильного отображения */
+                height: auto;
+            }
+        }
+
+        .breadcrumb__list {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 23px;
+            color: #333333;
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            /* На мобилках лучше в одну строку со скроллом */
+            overflow-x: auto;
+            gap: 4px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .breadcrumb__item {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .breadcrumb__item:not(:last-child)::after {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin-left: 4px;
+            background-color: #333333;
+            /* rgb(51, 51, 51) */
+
+            /* Маска с уточненной мобильной стрелкой - сделана тоньше (stroke-width 2) */
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='12' x2='18' y2='12'%3E%3C/line%3E%3Cpolyline points='12 6 18 12 12 18'%3E%3C/polyline%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='12' x2='18' y2='12'%3E%3C/line%3E%3Cpolyline points='12 6 18 12 12 18'%3E%3C/polyline%3E%3C/svg%3E");
+
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            vertical-align: middle;
+            flex-shrink: 0;
+        }
+
+        .breadcrumb__item span.bc-link {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .breadcrumb__item span.bc-active {
+            text-decoration: none;
+            color: #333333;
+        }
+
+        h1.page-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            line-height: 41px;
+            color: #333333;
+            margin: 0;
+            /* Отступ от хлебных крошек до заголовка "Můj účet" */
+            margin-top: 5px;
+            /* Добавь эту строку, чтобы отодвинуть заголовок вниз от крошек */
+            text-align: center;
+        }
+
+        .menu-aside {
+            width: 100%;
+            padding: 0 20px 20px 20px;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+
+        .menu-button {
+            background: #ffffff;
+            /* border-radius: 16px; */
+            border-radius: 24px !important;
+            /* Tailwind rounded-sm = 2px */
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            /* gap из оригинальных стилей (1.1111111rem) */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            line-height: 29px;
+            color: #333333;
+            cursor: pointer;
+            width: 100%;
+            border: none;
+            box-sizing: border-box;
+            text-align: left;
+        }
+
+        .icon-chevron-down {
+            stroke: #0075ff;
+            width: 20px;
+            /* Сделали стрелочку крупнее (было 16px) */
+            height: 20px;
+        }
+
+        .menu-nav {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-top: 10px;
+            padding: 16px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #333333;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .user-info strong {
+            font-weight: 700;
+        }
+
+        .user-info a {
+            color: #333333;
+            text-decoration: underline;
+            font-size: 14px;
+        }
+
+        .user-info a:hover {
+            color: #0075ff;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #333333;
+        }
+
+        .menu-list li span {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .menu-list li.active span {
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .menu-list li .icon-right {
+            width: 8px;
+            height: 8px;
+            stroke: #333333;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            /* Жесткое мобильное ограничение max-width снято для "резиновости" */
+            margin: 0 auto;
+            padding: 0 20px 20px 20px;
+            /* перенесенный отступ с body */
+            box-sizing: border-box;
+        }
+
+        h2.main-title {
+            font-size: var(--main-title-size);
+            line-height: var(--main-title-lh);
+            font-weight: 700;
+            /* ОТСТУП ОТ МЕНЮ ДО ЗАГОЛОВКА "Definitivní výsledky": (меняйте margin-top) */
+            margin-top: 10px;
+            margin-bottom: 20px;
+            /* <--- ВОТ ЭТА СТРОКА задает отступ до первой карточки от Def. vysledky */
+            color: #333333;
+            text-align: left;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            /* Отступ от левого края карточки до контента (внутренний отступ) */
+            padding: 24px 24px 24px 16px;
+            /* 16px — это новый отступ слева (был 24) */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        h3.card-title {
+            font-size: var(--card-title-size);
+            font-weight: 700;
+            line-height: var(--card-title-lh);
+            /* margin-top: 0; */
+            /* margin-bottom: 0; */
+            color: #333333;
+        }
+
+        /* Отступ для заголовка карточки "Odpovědi v testu" */
+        .title-odpovedi {
+            margin-top: 4px;
+            margin-bottom: 35px;
+        }
+
+        /* Отступ для заголовка карточки "Výsledky testu" */
+        .title-vysledky {
+            margin-top: 4px;
+            margin-bottom: 19px;
+        }
+
+        /* Специфичные отступы для карточки "Odpovědi v testu" (самой первой) */
+        .card-odpovedi {
+            /* ОТСТУП ПОСЛЕ ГОРИЗОНТАЛЬНОГО СКРОЛЛА ДО КОНЦА КАРТОЧКИ: */
+            /* Чтобы скролл был ровно на нижней границе, убираем нижний отступ (padding-bottom: 0) */
+            padding-bottom: 0px;
+            /* Скрываем всё, что может выходить за скругленные углы карточки внизу */
+            overflow: visible;
+        }
+
+        /* Первая карточка - Odpovědi */
+        .scroll-wrapper {
+            margin-left: -24px;
+            margin-right: -24px;
+            padding-left: 24px;
+            padding-right: 24px;
+            padding-bottom: 12px;
+            /* Воздух для скроллбара, чтобы он не слипался с нижней линией */
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .stats-table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 395px;
+            /* Чтобы таблица уходила за край экрана ~375px */
+        }
+
+        .stats-table th {
+            text-align: left;
+            font-size: var(--th-label-size);
+            line-height: var(--th-label-lh);
+            font-weight: 700;
+            color: #333333;
+            border-bottom: 2px solid #e2e8f0;
+            /* Более толстая линия (2px) */
+            padding-bottom: 10px;
+            padding-right: 8px;
+            white-space: nowrap;
+        }
+
+        .stats-table td {
+            text-align: left;
+            font-size: var(--td-data-size);
+            line-height: var(--td-data-lh);
+            font-weight: 400;
+            color: #333333;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            /* Более тонкая линия (1px) под цифрами (над скроллбаром) */
+        }
+
+        /* Вторая карточка - Výsledky testu */
+        .percentile-label {
+            font-size: var(--th-label-size);
+            line-height: var(--th-label-lh);
+            font-weight: 700;
+            color: #333333;
+            /* Отступ от "Celkový průměrný percentil" до прогресс-бара */
+            margin-bottom: 5px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 37px;
+            background-color: #CDCDCF;
+            border-radius: 30px;
+            /* Отступ от прогресс-бара до таблицы  */
+            margin-bottom: 25px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #0075ff;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 20px;
+            box-sizing: border-box;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: var(--td-data-size);
+            line-height: var(--td-data-lh);
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            text-align: left;
+            font-size: var(--th-label-size);
+            line-height: var(--th-label-lh);
+            font-weight: 700;
+            color: #333333;
+            padding-bottom: 9px;
+            border-bottom: 1px solid #e2e8f0;
+            /* Тонкая горизонтальная линия (1px) между шапкой и строкой */
+        }
+
+        .results-table td {
+            text-align: left;
+            font-size: var(--td-data-size);
+            line-height: var(--td-data-lh);
+            font-weight: 400;
+            color: #333333;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            /* Тонкая линия (1px) под результатами */
+        }
+
+        /* ПАНЕЛЬ УПРАВЛЕНИЯ ТИПОГРАФИКОЙ (Debug Panel) */
+        .debug-panel {
+            display: none;
+            /* Скрыта по запросу, но код оставлен */
+            background-color: #fff9c4;
+            /* легкий желтый фон */
+            border: 2px dashed #f57f17;
+            /* пунктирная рамка */
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .debug-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f57f17;
+            margin-top: 0;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .debug-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .debug-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .debug-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .debug-inputs {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .debug-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .debug-input-wrapper input {
+            width: 60px;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Адаптив для панели на широких экранах */
+        @media (min-width: 600px) {
+            .debug-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-white-bar">
+        <div class="header-content">
+            <div class="logo-container">
+                <a href="https://www.scio.cz/">
+                    <img src="https://sdilene.scio.cz/Content/imgs/logo.svg" alt="SCIO">
+                </a>
+            </div>
+
+            <ul class="breadcrumb__list">
+                <li class="breadcrumb__item"><span class="bc-link">Scio.cz</span></li>
+                <li class="breadcrumb__item"><span class="bc-link">Můj účet</span></li>
+                <li class="breadcrumb__item"><span class="bc-link">Zkoušky NSZ</span></li>
+                <li class="breadcrumb__item"><span class="bc-active">Výsledky</span></li>
+            </ul>
+            <h1 class="page-title">Můj účet</h1>
+        </div>
+    </div>
+
+    <aside class="menu-aside">
+        <button class="menu-button">
+            Menu
+            <svg class="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </button>
+    </aside>
+
+    <div class="page-wrapper">
+        <h2 class="main-title">Definitivní výsledky</h2>
+
+        <div class="card card-odpovedi">
+            <h3 class="card-title title-odpovedi">Odpovědi v testu</h3>
+
+            <div class="scroll-wrapper">
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Správně</th>
+                            <th>Špatně</th>
+                            <th>Vynecháno</th>
+                            <th>Neplatné</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>33</td>
+                            <td>2</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ТЕХНИЧЕСКИЙ БЛОК: Панель управления -->
+        <div class="debug-panel">
+            <h4 class="debug-title">⚙️ Live Typography Editor</h4>
+            <div class="debug-grid">
+
+                <div class="debug-group">
+                    <div class="debug-label">1. Main Title (Předběžné výsledky)</div>
+                    <div class="debug-inputs">
+                        <label class="debug-input-wrapper">
+                            FS: <input type="number" id="inp-main-size" value="38">px
+                        </label>
+                        <label class="debug-input-wrapper">
+                            LH: <input type="number" id="inp-main-lh" value="46">px
+                        </label>
+                    </div>
+                </div>
+
+                <div class="debug-group">
+                    <div class="debug-label">2. Card Titles (Odpovědi v testu...)</div>
+                    <div class="debug-inputs">
+                        <label class="debug-input-wrapper">
+                            FS: <input type="number" id="inp-card-size" value="32">px
+                        </label>
+                        <label class="debug-input-wrapper">
+                            LH: <input type="number" id="inp-card-lh" value="41">px
+                        </label>
+                    </div>
+                </div>
+
+                <div class="debug-group">
+                    <div class="debug-label">3. Table Headers & Labels</div>
+                    <div class="debug-inputs">
+                        <label class="debug-input-wrapper">
+                            FS: <input type="number" id="inp-th-size" value="13">px
+                        </label>
+                        <label class="debug-input-wrapper">
+                            LH: <input type="number" id="inp-th-lh" value="18">px
+                        </label>
+                    </div>
+                </div>
+
+                <div class="debug-group">
+                    <div class="debug-label">4. Table Data & Numbers</div>
+                    <div class="debug-inputs">
+                        <label class="debug-input-wrapper">
+                            FS: <input type="number" id="inp-td-size" value="14">px
+                        </label>
+                        <label class="debug-input-wrapper">
+                            LH: <input type="number" id="inp-td-lh" value="20">px
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title title-vysledky">Výsledky testu</h3>
+            <div class="percentile-label">Celkový průměrný percentil</div>
+
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 99%;">99</div>
+            </div>
+
+
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Oddíl</th>
+                        <th>Skóre</th>
+                        <th>Percentil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Matematika</td>
+                        <td>32,33</td>
+                        <td>99</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JS Скрипт для связывания инпутов и CSS-переменных -->
+    <script>
+        const rootVars = document.documentElement.style;
+
+        // Массив с привязками: ID инпута -> имя CSS-переменной
+        const bindings = [
+            { id: 'inp-main-size', cssVar: '--main-title-size' },
+            { id: 'inp-main-lh', cssVar: '--main-title-lh' },
+            { id: 'inp-card-size', cssVar: '--card-title-size' },
+            { id: 'inp-card-lh', cssVar: '--card-title-lh' },
+            { id: 'inp-th-size', cssVar: '--th-label-size' },
+            { id: 'inp-th-lh', cssVar: '--th-label-lh' },
+            { id: 'inp-td-size', cssVar: '--td-data-size' },
+            { id: 'inp-td-lh', cssVar: '--td-data-lh' }
+        ];
+
+        bindings.forEach(binding => {
+            const inputEl = document.getElementById(binding.id);
+            if (inputEl) {
+                inputEl.addEventListener('input', (event) => {
+                    const newValue = event.target.value;
+                    // Устанавливаем в :root обновленное значение вместе с суффиксом 'px'
+                    rootVars.setProperty(binding.cssVar, `${newValue}px`);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
